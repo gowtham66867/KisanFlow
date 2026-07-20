@@ -2,10 +2,14 @@
 
 AI-powered cash-flow forecasting for rural credit access — a NABARD application concept for scoring credit-history-less farmers using alternative data (weather, mandi prices, transaction history) instead of traditional collateral/credit-bureau checks.
 
+**Live demo:** [kisanflow-demo-564262191703.us-east1.run.app](https://kisanflow-demo-564262191703.us-east1.run.app) (Google Cloud Run)
+
 ## Contents
 
 - [`KisanFlow_NABARD_Application.docx`](./KisanFlow_NABARD_Application.docx) — the full application write-up: problem statement, solution/business model, tech stack, agent architecture, and a data sources & known limitations section.
+- [`KisanFlow_Presentation.pptx`](./KisanFlow_Presentation.pptx) — a 12-slide pitch deck covering the problem, solution, business model, agentic architecture, and roadmap.
 - [`demo/kisanflow_demo.html`](./demo/kisanflow_demo.html) — a self-contained, interactive walkthrough of the agentic pipeline. Open it directly in a browser (no server or build step required).
+- [`cloud-run/`](./cloud-run) — the containerized version of the demo (`Dockerfile` + `nginx.conf`) deployed to Google Cloud Run at the link above.
 - [`scripts/build_nabard_doc.js`](./scripts/build_nabard_doc.js) — the Node/`docx` script that generates the application `.docx` from source. Run `npm install docx && node scripts/build_nabard_doc.js`.
 
 ## What the demo shows
