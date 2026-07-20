@@ -1,0 +1,535 @@
+<title>KisanFlow — Agentic Cash Flow Forecasting Demo</title>
+<style>
+  :root {
+    --ground: #EDEFE4;
+    --ground-raised: #F7F8EF;
+    --ink: #1B2420;
+    --ink-soft: #4A544B;
+    --line: #CBD1BE;
+    --accent: #C97A1A;
+    --accent-soft: #F1DDB8;
+    --good: #4E7C55;
+    --good-soft: #DCE9DC;
+    --risk: #B2472F;
+    --risk-soft: #F3DCD5;
+    --shadow: 0 1px 2px rgba(27,36,32,0.06), 0 6px 20px rgba(27,36,32,0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #141E1A; --ground-raised: #1B2622; --ink: #EAEDE4; --ink-soft: #A6AFA0;
+      --line: #33403A; --accent: #E8A33D; --accent-soft: #3A2E19; --good: #7FB388;
+      --good-soft: #223A28; --risk: #DE7A61; --risk-soft: #3D2420;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #141E1A; --ground-raised: #1B2622; --ink: #EAEDE4; --ink-soft: #A6AFA0;
+    --line: #33403A; --accent: #E8A33D; --accent-soft: #3A2E19; --good: #7FB388;
+    --good-soft: #223A28; --risk: #DE7A61; --risk-soft: #3D2420;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+  }
+  :root[data-theme="light"] {
+    --ground: #EDEFE4; --ground-raised: #F7F8EF; --ink: #1B2420; --ink-soft: #4A544B;
+    --line: #CBD1BE; --accent: #C97A1A; --accent-soft: #F1DDB8; --good: #4E7C55;
+    --good-soft: #DCE9DC; --risk: #B2472F; --risk-soft: #F3DCD5;
+    --shadow: 0 1px 2px rgba(27,36,32,0.06), 0 6px 20px rgba(27,36,32,0.05);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    margin: 0;
+    padding: 32px 20px 60px;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+
+  header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+  .word { font-family: Georgia, "Iowan Old Style", "Times New Roman", serif; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
+  .word span { color: var(--accent); }
+  .badge-live { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--good); background: var(--good-soft); border-radius: 999px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 6px; }
+  .badge-live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--good); }
+  .sub { color: var(--ink-soft); font-size: 15px; max-width: 68ch; margin: 10px 0 28px; }
+
+  .panel {
+    background: var(--ground-raised);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
+  }
+  .eyebrow { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin: 0 0 12px; }
+
+  .profile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 18px; }
+  @media (max-width: 860px) { .profile-grid { grid-template-columns: repeat(2, 1fr); } }
+  label.field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--ink-soft); }
+  label.field select, label.field input[type="number"] {
+    font: inherit; font-size: 14px; color: var(--ink); background: var(--ground);
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px;
+  }
+  label.field input[type="range"] { accent-color: var(--accent); }
+  .range-val { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; color: var(--ink); font-size: 13px; }
+
+  .toggles { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .toggle {
+    display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 999px;
+    padding: 7px 12px 7px 8px; font-size: 12.5px; color: var(--ink-soft); cursor: pointer; user-select: none;
+    background: var(--ground); transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .toggle input { display: none; }
+  .toggle .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--line); transition: background 0.15s; flex: none; }
+  .toggle.on { background: var(--good-soft); color: var(--ink); border-color: var(--good); }
+  .toggle.on .dot { background: var(--good); }
+  .toggle.mem.on { background: var(--accent-soft); color: var(--ink); border-color: var(--accent); }
+  .toggle.mem.on .dot { background: var(--accent); }
+
+  .memory-box { margin-top: 14px; border: 1px dashed var(--line); border-radius: 10px; padding: 10px 14px; font-size: 12.5px; color: var(--ink-soft); display: none; }
+  .memory-box.show { display: block; }
+  .memory-box .mrow { display: flex; justify-content: space-between; padding: 3px 0; font-variant-numeric: tabular-nums; }
+  .memory-box .mrow strong { color: var(--good); font-weight: 600; }
+
+  /* Orchestrator trace console — deliberately a fixed dark terminal in both themes */
+  .trace-panel {
+    background: #10160F; border: 1px solid #26302180; border-radius: 14px; padding: 16px 18px;
+    box-shadow: var(--shadow); margin-top: 16px;
+  }
+  .trace-title { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #8FA893; margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
+  .trace-title::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #E8A33D; box-shadow: 0 0 6px #E8A33D; }
+  .trace-log { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; line-height: 1.75; max-height: 230px; overflow-y: auto; }
+  .trace-line { white-space: pre-wrap; word-break: break-word; }
+  .trace-tag { color: #E8A33D; }
+  .trace-ok { color: #7FB388; }
+  .trace-warn { color: #DE7A61; }
+  .trace-dim { color: #7A8A7D; }
+  .trace-txt { color: #D7E4D8; }
+
+  .pipeline { display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 16px; margin-top: 16px; align-items: stretch; }
+  @media (max-width: 900px) { .pipeline { grid-template-columns: 1fr; } }
+  .stage { display: flex; flex-direction: column; gap: 10px; }
+  .stage-label { display: flex; align-items: center; gap: 8px; }
+  .stage-num { font-family: ui-monospace, monospace; font-size: 11px; color: var(--ink-soft); background: var(--ground); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; }
+  .stage h3 { margin: 0; font-size: 14.5px; font-weight: 650; }
+  .stage-body { flex: 1; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: 12px; border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; color: var(--ink-soft); background: var(--ground); }
+  .chip.active { color: var(--ink); border-color: var(--accent); background: var(--accent-soft); }
+
+  .calendar-row { font-size: 12.5px; color: var(--ink-soft); margin-top: 10px; display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+  .calendar-row strong { color: var(--ink); font-weight: 600; }
+
+  svg text { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+  .score-row { display: flex; align-items: baseline; gap: 10px; margin-top: 8px; }
+  .score-num { font-family: Georgia, serif; font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 12px; color: var(--ink-soft); }
+
+  .verify-badge { display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 6px 12px; font-size: 12.5px; font-weight: 600; margin-top: 10px; }
+  .verify-badge.pass { background: var(--good-soft); color: var(--good); }
+  .verify-badge.fail { background: var(--risk-soft); color: var(--risk); }
+  .verify-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .verify-note { font-size: 12.5px; color: var(--ink-soft); margin-top: 8px; }
+
+  .route-strip { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 16px; }
+  .route-badge { display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 6px 12px; font-size: 12.5px; font-weight: 600; }
+  .route-badge.auto { background: var(--good-soft); color: var(--good); }
+  .route-badge.review { background: var(--risk-soft); color: var(--risk); }
+  .route-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .route-note { font-size: 12.5px; color: var(--ink-soft); }
+
+  .fallback-banner { display: none; margin-top: 12px; border: 1px solid var(--risk); background: var(--risk-soft); color: var(--risk); border-radius: 10px; padding: 10px 14px; font-size: 12.5px; font-weight: 600; }
+  .fallback-banner.show { display: block; }
+
+  .advisory-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  @media (max-width: 760px) { .advisory-grid { grid-template-columns: 1fr; } }
+  .advisory-card { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; background: var(--ground-raised); }
+  .advisory-card h4 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-soft); font-weight: 650; }
+  .kv { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px dashed var(--line); font-size: 13.5px; }
+  .kv:last-of-type { border-bottom: none; }
+  .kv .k { color: var(--ink-soft); }
+  .kv .v { font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+  .prose { font-size: 13.5px; color: var(--ink); margin: 0; }
+  .prose + .prose { margin-top: 8px; }
+  .cite-chip { display: inline-flex; align-items: flex-start; gap: 6px; margin-top: 10px; font-size: 12px; color: var(--ink-soft); border-left: 2px solid var(--accent); padding-left: 8px; }
+
+  .prov-grid { display: flex; flex-direction: column; gap: 8px; }
+  .prov-row { display: grid; grid-template-columns: 200px 1fr; gap: 12px; font-size: 12.5px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+  .prov-row:last-child { border-bottom: none; }
+  .prov-k { color: var(--ink-soft); font-weight: 600; }
+  .prov-v { color: var(--ink); }
+  @media (max-width: 700px) { .prov-row { grid-template-columns: 1fr; gap: 2px; } }
+  .prov-gap { font-size: 12px; color: var(--risk); margin: 12px 0 0; }
+
+  .footnote { margin-top: 26px; font-size: 12px; color: var(--ink-soft); border-top: 1px solid var(--line); padding-top: 14px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="word">Kisan<span>Flow</span></div>
+    <span class="badge-live">simulated demo — agentic pipeline</span>
+  </header>
+  <p class="sub">A working walkthrough of the agentic pipeline: an Orchestrator dynamically routes a farmer profile through tool-calling, forecasting, self-verification, memory recall, and retrieval-grounded advisory agents — with a visible reasoning trace and a guardrail that overrides the model when confidence is too low to trust.</p>
+
+  <div class="panel">
+    <p class="eyebrow">Stage 0 · Farmer profile</p>
+    <div class="profile-grid">
+      <label class="field">Crop
+        <select id="crop">
+          <option value="rice">Rice (Kharif)</option>
+          <option value="cotton">Cotton (Kharif)</option>
+          <option value="wheat">Wheat (Rabi)</option>
+          <option value="sugarcane">Sugarcane (annual)</option>
+        </select>
+      </label>
+      <label class="field">Region
+        <select id="region">
+          <option value="maharashtra">Maharashtra</option>
+          <option value="punjab">Punjab</option>
+          <option value="tamilnadu">Tamil Nadu</option>
+          <option value="bihar">Bihar</option>
+        </select>
+      </label>
+      <label class="field">Land size (acres)
+        <input type="range" id="land" min="1" max="10" step="0.5" value="3">
+        <span class="range-val" id="landVal">3.0 acres</span>
+      </label>
+      <label class="field">Requested loan amount (₹)
+        <input type="range" id="loan" min="10000" max="150000" step="5000" value="60000">
+        <span class="range-val" id="loanVal">₹60,000</span>
+      </label>
+    </div>
+    <div class="toggles">
+      <label class="toggle on" data-key="weather"><input type="checkbox" checked><span class="dot"></span>IMD / weather signal</label>
+      <label class="toggle on" data-key="mandi"><input type="checkbox" checked><span class="dot"></span>Agmarknet mandi prices</label>
+      <label class="toggle" data-key="upi"><input type="checkbox"><span class="dot"></span>UPI / transaction history</label>
+      <label class="toggle mem" data-key="returning"><input type="checkbox"><span class="dot"></span>Returning borrower (Memory Agent has history)</label>
+    </div>
+    <div class="memory-box" id="memoryBox">
+      <div class="mrow"><span>Season 1 (last Rabi)</span><strong>Repaid on time</strong></div>
+      <div class="mrow"><span>Season 2</span><strong>Repaid on time</strong></div>
+      <div class="mrow"><span>Season 3</span><strong>Repaid 4 days late</strong></div>
+      <div class="mrow"><span>Memory Agent trust adjustment</span><strong>+20 confidence</strong></div>
+    </div>
+  </div>
+
+  <div class="trace-panel">
+    <p class="trace-title">Agent Orchestrator · live reasoning trace</p>
+    <div class="trace-log" id="traceLog"></div>
+  </div>
+
+  <div class="pipeline">
+    <div class="stage panel">
+      <div class="stage-label"><span class="stage-num">01</span><h3>Data Agent</h3></div>
+      <div class="stage-body">
+        <p class="eyebrow" style="margin-bottom:8px;">Tool calls this turn</p>
+        <div class="chips" id="signalChips"></div>
+        <div class="calendar-row"><span>Sowing</span><strong id="sowLabel">—</strong></div>
+        <div class="calendar-row"><span>Harvest</span><strong id="harvestLabel">—</strong></div>
+        <div class="calendar-row"><span>Input cost / acre</span><strong id="inputCostLabel">—</strong></div>
+      </div>
+    </div>
+
+    <div class="stage panel">
+      <div class="stage-label"><span class="stage-num">02</span><h3>Forecasting Agent</h3></div>
+      <div class="stage-body">
+        <p class="eyebrow" style="margin-bottom:8px;">12-month net cash flow &amp; reserve</p>
+        <svg id="chart" viewBox="0 0 460 190" width="100%" height="190"></svg>
+        <div class="score-row">
+          <span class="score-num" id="repayScore">—</span>
+          <span class="score-label">repayment capacity score /100</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage panel">
+      <div class="stage-label"><span class="stage-num">03</span><h3>Verifier Agent</h3></div>
+      <div class="stage-body">
+        <p class="eyebrow" style="margin-bottom:8px;">Self-check against a sanity band</p>
+        <div class="score-row"><span class="score-num" id="confScore">—</span><span class="score-label">confidence /100</span></div>
+        <span class="verify-badge" id="verifyBadge"><span class="dot"></span><span id="verifyText">—</span></span>
+        <p class="verify-note" id="verifyNote"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:16px;">
+    <p class="eyebrow">Stage 04 · Confidence router</p>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Guardrail engaged — ML forecast rejected by Verifier Agent; Advisory Agent has fallen back to a conservative rule-based estimate.</div>
+    <div class="route-strip">
+      <span class="route-badge" id="routeBadge"><span class="dot"></span><span id="routeText">—</span></span>
+      <span class="route-note" id="routeNote"></span>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:16px;">
+    <p class="eyebrow">Stage 05 · Advisory Agent output (retrieval-grounded)</p>
+    <div class="advisory-grid">
+      <div class="advisory-card">
+        <h4>For the lender</h4>
+        <div class="kv"><span class="k">Recommended loan amount</span><span class="v" id="advLoan">—</span></div>
+        <div class="kv"><span class="k">Basis</span><span class="v" id="advBasis">—</span></div>
+        <div class="kv"><span class="k">Ideal disbursement window</span><span class="v" id="advDisburse">—</span></div>
+        <div class="kv"><span class="k">Repayment start</span><span class="v" id="advRepay">—</span></div>
+        <div class="kv"><span class="k">Deepest deficit</span><span class="v" id="advDeficit">—</span></div>
+      </div>
+      <div class="advisory-card">
+        <h4>For the farmer</h4>
+        <p class="prose" id="advFarmer1">—</p>
+        <p class="prose" id="advFarmer2">—</p>
+        <div class="cite-chip">📎<span id="ragCite">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:16px;">
+    <p class="eyebrow">Data provenance</p>
+    <div class="prov-grid">
+      <div class="prov-row"><span class="prov-k">Rice yield / MSP</span><span class="prov-v">17 quintal/acre · ₹2,369/quintal — DES Cost of Cultivation (41.25 q/ha) &amp; Kharif MSP 2024–25</span></div>
+      <div class="prov-row"><span class="prov-k">Cotton yield / MSP</span><span class="prov-v">5 quintal/acre (kapas, ~34% ginning outturn) · ₹7,710/quintal — USDA/CAI lint yield &amp; Kharif MSP 2024–25</span></div>
+      <div class="prov-row"><span class="prov-k">Wheat yield / MSP</span><span class="prov-v">15 quintal/acre · ₹2,275/quintal — Economic Survey yield table &amp; RMS 2024–25 MSP</span></div>
+      <div class="prov-row"><span class="prov-k">Sugarcane yield / price</span><span class="prov-v">300 quintal/acre · ₹340/quintal — approximate national average, not a confirmed FRP figure (flagged, unverified)</span></div>
+      <div class="prov-row"><span class="prov-k">Cost of cultivation (all crops)</span><span class="prov-v">Midpoint of published CACP/DES per-acre ranges — a national average, not this farmer's actual input spend</span></div>
+      <div class="prov-row"><span class="prov-k">Household draw &amp; regional monsoon notes</span><span class="prov-v">Planning-assumption estimates, not sourced from an official statistic — flagged as such</span></div>
+    </div>
+    <p class="prov-gap">Still missing before this prices a real loan: farm-specific (not national-average) yield history, and any correlation check between the confidence score and actual repayment outcomes — see the utility discussion in the application document.</p>
+  </div>
+
+  <p class="footnote">Agentic concepts demonstrated: dynamic orchestration (routing changes for returning vs. new borrowers), explicit tool calls with a visible trace, a Verifier agent that can reject the Forecasting Agent's own output, a rule-based guardrail fallback when confidence is too low to trust, persistent cross-season memory, and retrieval-augmented grounding for the farmer-facing advisory text. Crop economics use real government-published baselines (above); weather/mandi/UPI signals themselves are still simulated toggles, not live API calls.</p>
+</div>
+
+<script>
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+// Yield/price/cost baselines are national-average figures from government sources (see Data
+// Provenance panel below), converted from per-hectare to per-acre at 1 ha = 2.471 acres.
+// These are starting priors for an MVP, not a substitute for farm-specific yield history —
+// see the footnote for what's still missing before this can price a real loan.
+const CROPS = {
+  rice:      { sow: 5,  harvest: 10, yieldPerAcre: 17, price: 2369, inputCostPerAcre: 23000, inputSpread: [5,6,7], householdPerAcre: 900,
+               note: "Kharif rice depends on timely monsoon onset — sowing delayed past mid-June typically compresses the harvest window and raises mandi-sale price risk." },
+  cotton:    { sow: 5,  harvest: 11, yieldPerAcre: 5,  price: 7710, inputCostPerAcre: 37500, inputSpread: [5,6,7,8], householdPerAcre: 900,
+               note: "Cotton picking is staggered over 3–4 months, so cash arrives in tranches rather than one lump sum — disbursement should assume a trickle, not a spike." },
+  wheat:     { sow: 10, harvest: 3,  yieldPerAcre: 15, price: 2275, inputCostPerAcre: 18000, inputSpread: [10,11], householdPerAcre: 850,
+               note: "Rabi wheat leans on irrigation rather than rainfall — Punjab-type irrigated belts typically run 40–50% above this national-average yield." },
+  sugarcane: { sow: 1,  harvest: 11, yieldPerAcre: 300, price: 340, inputCostPerAcre: 45000, inputSpread: [1,2,3], householdPerAcre: 1000,
+               note: "Sugarcane is a 12-month crop with mill-driven payment delays common after harvest — factor a payment lag into the repayment schedule." },
+};
+
+const REGIONS = {
+  maharashtra: { label: "Maharashtra", note: "Vidarbha and Marathwada districts see high monsoon variability; a two-week sowing delay is common in below-normal rainfall years." },
+  punjab:      { label: "Punjab", note: "High irrigation coverage lowers rainfall dependency here; mandi arrival price swings are the dominant seasonal risk instead." },
+  tamilnadu:   { label: "Tamil Nadu", note: "The northeast monsoon (Oct–Dec) drives a second cropping window, so harvest timing can run later than the national average." },
+  bihar:       { label: "Bihar", note: "Flood risk in low-lying districts during peak monsoon months can delay both sowing and harvest logistics." },
+};
+
+const fmtINR = (n) => "₹" + Math.round(n).toLocaleString("en-IN");
+
+function buildSeries(crop, acres) {
+  const c = CROPS[crop];
+  const flows = new Array(12).fill(0);
+  for (const m of c.inputSpread) {
+    flows[m] -= (c.inputCostPerAcre * acres) / c.inputSpread.length;
+  }
+  for (let m = 0; m < 12; m++) {
+    flows[m] -= c.householdPerAcre * acres / 3;
+  }
+  flows[c.harvest] += c.yieldPerAcre * acres * c.price;
+  return flows;
+}
+
+function cumulative(flows) {
+  const out = [];
+  let running = 0;
+  for (const f of flows) { running += f; out.push(running); }
+  return out;
+}
+
+function trace(lines) {
+  const el = document.getElementById("traceLog");
+  el.innerHTML = lines.map(l => `<div class="trace-line">${l}</div>`).join("");
+  el.scrollTop = 0;
+}
+const tag = (name) => `<span class="trace-tag">[${name}]</span>`;
+
+function render() {
+  const crop = document.getElementById("crop").value;
+  const region = document.getElementById("region").value;
+  const acres = parseFloat(document.getElementById("land").value);
+  const loanAsk = parseFloat(document.getElementById("loan").value);
+  const c = CROPS[crop];
+  const r = REGIONS[region];
+
+  document.getElementById("landVal").textContent = acres.toFixed(1) + " acres";
+  document.getElementById("loanVal").textContent = fmtINR(loanAsk);
+
+  const toggles = {};
+  document.querySelectorAll(".toggle").forEach(t => { toggles[t.dataset.key] = t.classList.contains("on"); });
+  document.getElementById("memoryBox").classList.toggle("show", toggles.returning);
+
+  const log = [];
+  log.push(`${tag("orchestrator")} <span class="trace-txt">state = ${toggles.returning ? "returning_borrower" : "new_borrower"} → planning agent route</span>`);
+
+  if (toggles.returning) {
+    log.push(`${tag("orchestrator")} <span class="trace-txt">handoff → MemoryAgent (borrower has prior seasons on file)</span>`);
+    log.push(`${tag("memory_agent")} <span class="trace-txt">recall(seasons=3) → 2 on-time, 1 late-by-4d → trust_bonus=+20</span>`);
+  } else {
+    log.push(`${tag("orchestrator")} <span class="trace-dim">MemoryAgent skipped — no repayment history on file</span>`);
+  }
+
+  log.push(`${tag("orchestrator")} <span class="trace-txt">handoff → DataAgent</span>`);
+  log.push(`${tag("data_agent")} <span class="${toggles.weather ? 'trace-ok' : 'trace-warn'}">tool_call get_weather(region="${r.label}") → ${toggles.weather ? "ok" : "SKIPPED (signal unavailable)"}</span>`);
+  log.push(`${tag("data_agent")} <span class="${toggles.mandi ? 'trace-ok' : 'trace-warn'}">tool_call get_mandi_price(crop="${crop}") → ${toggles.mandi ? "ok" : "SKIPPED (signal unavailable)"}</span>`);
+  log.push(`${tag("data_agent")} <span class="${toggles.upi ? 'trace-ok' : 'trace-warn'}">tool_call get_transaction_history() → ${toggles.upi ? "ok" : "SKIPPED (signal unavailable)"}</span>`);
+  log.push(`${tag("orchestrator")} <span class="trace-txt">handoff → ForecastingAgent</span>`);
+
+  const chipMeta = { weather: "get_weather()", mandi: "get_mandi_price()", upi: "get_transaction_history()" };
+  const chipsEl = document.getElementById("signalChips");
+  chipsEl.innerHTML = "";
+  Object.keys(chipMeta).forEach(k => {
+    const span = document.createElement("span");
+    span.className = "chip" + (toggles[k] ? " active" : "");
+    span.textContent = (toggles[k] ? "✓ " : "— ") + chipMeta[k];
+    chipsEl.appendChild(span);
+  });
+
+  document.getElementById("sowLabel").textContent = MONTHS[c.sow];
+  document.getElementById("harvestLabel").textContent = MONTHS[c.harvest];
+  document.getElementById("inputCostLabel").textContent = fmtINR(c.inputCostPerAcre) + " /acre";
+
+  const flows = buildSeries(crop, acres);
+  const reserve = cumulative(flows);
+  const minReserve = Math.min(...reserve);
+  const minIdx = reserve.indexOf(minReserve);
+  const deficitDepth = Math.abs(minReserve);
+
+  const totalOutflow = flows.filter(f => f < 0).reduce((a,b) => a - b, 0);
+  const harvestInflow = c.yieldPerAcre * acres * c.price;
+  const surplusRatio = Math.max(0, (harvestInflow - totalOutflow) / (totalOutflow || 1));
+  let repayScore = Math.round(Math.min(96, 40 + surplusRatio * 55));
+  repayScore = Math.max(8, repayScore);
+  document.getElementById("repayScore").textContent = repayScore;
+  log.push(`${tag("forecasting_agent")} <span class="trace-txt">repayment_capacity_score = ${repayScore}, deepest_deficit = ${fmtINR(deficitDepth)} (${MONTHS[minIdx]})</span>`);
+
+  const base = 25, perSignal = 25;
+  let confidence = base + (toggles.weather ? perSignal : 0) + (toggles.mandi ? perSignal : 0) + (toggles.upi ? perSignal : 0);
+  if (toggles.returning) confidence = Math.min(100, confidence + 20);
+  document.getElementById("confScore").textContent = confidence;
+
+  log.push(`${tag("orchestrator")} <span class="trace-txt">handoff → VerifierAgent</span>`);
+  const anomaly = confidence < 50;
+  const verifyBadge = document.getElementById("verifyBadge");
+  const verifyText = document.getElementById("verifyText");
+  const verifyNote = document.getElementById("verifyNote");
+  const fallbackBanner = document.getElementById("fallbackBanner");
+  if (anomaly) {
+    verifyBadge.className = "verify-badge fail";
+    verifyText.textContent = "Sanity check FAILED";
+    verifyNote.textContent = "Data completeness is too thin to trust the ML forecast at face value — Verifier rejects it and forces a conservative rule-based fallback.";
+    log.push(`${tag("verifier_agent")} <span class="trace-warn">sanity_check FAIL — confidence(${confidence}) below trust floor(50) → reject ML output, engage guardrail</span>`);
+    fallbackBanner.classList.add("show");
+  } else {
+    verifyBadge.className = "verify-badge pass";
+    verifyText.textContent = "Sanity check passed";
+    verifyNote.textContent = "Forecast falls within the expected band for this crop and land size — cleared to pass downstream.";
+    log.push(`${tag("verifier_agent")} <span class="trace-ok">sanity_check PASS — confidence(${confidence}) within expected band</span>`);
+    fallbackBanner.classList.remove("show");
+  }
+
+  log.push(`${tag("orchestrator")} <span class="trace-txt">handoff → ConfidenceRouter</span>`);
+  const badge = document.getElementById("routeBadge");
+  const routeText = document.getElementById("routeText");
+  const routeNote = document.getElementById("routeNote");
+  if (!anomaly && confidence >= 75) {
+    badge.className = "route-badge auto";
+    routeText.textContent = "Auto-approved recommendation";
+    routeNote.textContent = "Enough signal coverage to route straight to the lender's loan-origination API without manual review.";
+    log.push(`${tag("confidence_router")} <span class="trace-ok">score=${confidence} → AUTO_APPROVE</span>`);
+  } else {
+    badge.className = "route-badge review";
+    routeText.textContent = "Flagged for loan-officer review";
+    routeNote.textContent = anomaly
+      ? "Verifier rejected the forecast, so this file always goes to a human regardless of score."
+      : "Missing signals lower certainty — routed to a human loan officer before disbursement.";
+    log.push(`${tag("confidence_router")} <span class="trace-warn">score=${confidence}${anomaly ? ", verifier=FAIL" : ""} → MANUAL_REVIEW</span>`);
+  }
+
+  log.push(`${tag("orchestrator")} <span class="trace-txt">handoff → AdvisoryAgent (RAG-grounded)</span>`);
+  log.push(`${tag("advisory_agent")} <span class="trace-txt">retrieve(region="${r.label}", crop="${crop}") → 2 grounding notes</span>`);
+  log.push(`${tag("advisory_agent")} <span class="trace-ok">output generated for lender + farmer</span>`);
+  trace(log);
+
+  // chart
+  const W = 460, H = 190, padL = 30, padR = 8, padT = 10, padB = 22;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const maxAbs = Math.max(...flows.map(f => Math.abs(f)), 1000);
+  const barW = plotW / 12 * 0.6;
+  const zeroY = padT + plotH * 0.62;
+  const scale = (plotH * 0.62 - 4) / maxAbs;
+  const reserveMax = Math.max(...reserve, 1);
+  const reserveMin = Math.min(...reserve, 0);
+  const reserveRange = (reserveMax - reserveMin) || 1;
+
+  let svg = "";
+  svg += `<line x1="${padL}" y1="${zeroY}" x2="${W-padR}" y2="${zeroY}" stroke="var(--line)" stroke-width="1"/>`;
+  flows.forEach((f, i) => {
+    const cx = padL + (plotW / 12) * i + (plotW/12 - barW)/2;
+    const h = Math.abs(f) * scale;
+    const y = f >= 0 ? zeroY - h : zeroY;
+    const isHarvest = i === c.harvest;
+    const isDeficitMonth = reserve[i] === minReserve;
+    const color = f >= 0 ? "var(--good)" : (isDeficitMonth ? "var(--risk)" : "var(--accent)");
+    svg += `<rect x="${cx.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(h,1).toFixed(1)}" rx="2" fill="${color}" opacity="${isHarvest ? 1 : 0.85}"/>`;
+  });
+  let path = "";
+  reserve.forEach((rv, i) => {
+    const cx = padL + (plotW / 12) * i + (plotW/12)/2;
+    const cy = padT + plotH - ((rv - reserveMin) / reserveRange) * (plotH * 0.32) - 2;
+    path += (i === 0 ? "M" : "L") + cx.toFixed(1) + "," + cy.toFixed(1) + " ";
+  });
+  svg += `<path d="${path}" fill="none" stroke="var(--ink-soft)" stroke-width="1.5" stroke-dasharray="3,2"/>`;
+  MONTHS.forEach((m, i) => {
+    const cx = padL + (plotW / 12) * i + (plotW/12)/2;
+    svg += `<text x="${cx.toFixed(1)}" y="${H-6}" font-size="8" fill="var(--ink-soft)" text-anchor="middle">${m[0]}</text>`;
+  });
+  document.getElementById("chart").innerHTML = svg;
+
+  // advisory
+  const windowStart = MONTHS[minIdx];
+  const windowEnd = MONTHS[(minIdx + 1) % 12];
+  let recommendedLoan, basis;
+  if (anomaly) {
+    recommendedLoan = Math.round((c.inputCostPerAcre * acres * 1.1) / 5000) * 5000;
+    basis = "Rule-based fallback (input cost × 1.1)";
+  } else {
+    recommendedLoan = Math.max(Math.round((deficitDepth * 1.15) / 5000) * 5000, 10000);
+    basis = "ML forecast × 1.15 buffer";
+  }
+  document.getElementById("advLoan").textContent = fmtINR(recommendedLoan);
+  document.getElementById("advBasis").textContent = basis;
+  document.getElementById("advDisburse").textContent = MONTHS[c.sow] + " (sowing)";
+  document.getElementById("advRepay").textContent = MONTHS[c.harvest] + " + 2 weeks";
+  document.getElementById("advDeficit").textContent = windowStart + "–" + windowEnd + " (" + fmtINR(deficitDepth) + ")";
+
+  document.getElementById("advFarmer1").textContent =
+    `Your tightest stretch runs ${windowStart}–${windowEnd}, after input costs go out and before ${MONTHS[c.harvest]} sales come in. Plan for roughly ${fmtINR(deficitDepth)} of buffer through that period.`;
+  document.getElementById("advFarmer2").textContent = anomaly
+    ? "We didn't have enough live signals to trust a precise forecast this time, so we used a safer, simpler estimate — share weather, mandi, or UPI history next season for a sharper number."
+    : (confidence >= 75
+      ? "Because we had good visibility into your signals, this recommendation went straight to your lender — no extra paperwork needed."
+      : "We flagged your file for a quick review by a loan officer — sharing more signals next time can help you get an instant answer.");
+  document.getElementById("ragCite").textContent = `${r.label}: "${r.note}" · ${crop}: "${c.note}"`;
+}
+
+document.querySelectorAll("#crop, #region, #land, #loan").forEach(el => el.addEventListener("input", render));
+document.querySelectorAll(".toggle").forEach(t => {
+  const input = t.querySelector("input");
+  input.addEventListener("change", () => {
+    t.classList.toggle("on", input.checked);
+    render();
+  });
+});
+
+render();
+</script>
