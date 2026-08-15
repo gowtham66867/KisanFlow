@@ -1,4 +1,4 @@
-# KisanFlow — three-minute jury walkthrough
+# KisanFlow — three-minute product walkthrough
 
 Live demo: <https://kisanflow-demo-1012823692058.us-east1.run.app>
 
@@ -32,7 +32,7 @@ Live demo: <https://kisanflow-demo-1012823692058.us-east1.run.app>
 
 **What makes the agent safe?** Input/consent validation, prohibited-field checks, an eight-tool allow-list, deterministic numerical tools, turn/tool/time limits, timeout fallback, verifier, idempotency, stable replay fingerprint, maker-checker, kill switch, and no exposed sanction/contact tools.
 
-**Can a jury break it from the address bar?** Please try. Verified against the live service: withdrawn consent, an expired receipt, an unknown fixture, a prohibited personal field, an injected `prompt` field and a checker posing as a maker all return 422 before any tool runs; an oversized body returns 413; a wrong method returns 405; malformed JSON returns 400; path traversal returns 404; and `KISANFLOW_KILL_SWITCH=on` returns 503 with `/api/status` reporting `halted`. The same fixture always returns the same replay fingerprint and action-card id.
+**Are the safety controls enforced on the server?** Yes. Verified against the live service: withdrawn consent, an expired receipt, an unknown fixture, a prohibited personal field, an injected `prompt` field and a checker posing as a maker all return 422 before any tool runs; an oversized body returns 413; a wrong method returns 405; malformed JSON returns 400; path traversal returns 404; and `KISANFLOW_KILL_SWITCH=on` returns 503 with `/api/status` reporting `halted`. The same fixture always returns the same replay fingerprint and action-card id.
 
 **How does it use Account Aggregator?** As a consented, purpose-bound rail for verified financial information. The current repository implements the receipt and adapter contracts only; it does not claim a live AA connection.
 

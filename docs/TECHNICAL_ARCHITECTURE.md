@@ -102,7 +102,7 @@ Evaluation includes MAE, sMAPE, MASE, interval coverage, early-warning precision
 - `KISANFLOW_KILL_SWITCH=on` rejects new runs with HTTP 503.
 - Static path canonicalisation blocks traversal; security headers deny framing and browser sensors.
 - No raw production PII is accepted by the public endpoint.
-- Cloud Run uses scale-to-zero and a one-instance maximum for the jury deployment.
+- Cloud Run uses scale-to-zero and a one-instance maximum for the public demonstration service.
 - Model-provider failures degrade to deterministic planning.
 
 See `THREAT_MODEL.md` and `docs/evals/AGENT_HARNESS_EVALS.md` for the tested threat and release contracts.
