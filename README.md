@@ -1,5 +1,9 @@
 # KisanFlow Enterprise Pulse
 
+[![Continuous integration](https://github.com/gowtham66867/KisanFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/gowtham66867/KisanFlow/actions/workflows/ci.yml)
+[![Live demo](https://img.shields.io/badge/live_demo-running-1f7a55)](https://kisanflow-demo-1012823692058.us-east1.run.app)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+
 **Predict the next 26 weeks. Explain emerging stress. Recommend a consented response. Stop at an authorised human.**
 
 KisanFlow is a working NABARD Hackathon 2026 prototype for SHGs, FPOs and rural micro-enterprises. It combines weekly financial activity, optional digital-payment proxies, market intelligence and climate seasonality into P10/P50/P90 cash-flow forecasts, an early-warning card and a maker-checker intervention workflow.
@@ -8,11 +12,14 @@ KisanFlow is a working NABARD Hackathon 2026 prototype for SHGs, FPOs and rural 
 
 **Three-minute demo video:** [Watch the KisanFlow product walkthrough on Loom](https://www.loom.com/share/b22f095e05fd43a1b061f9d87f1eac70)
 
+[![KisanFlow consent, forecasting and bounded-agent interface](docs/assets/kisanflow-dashboard.png)](https://kisanflow-demo-1012823692058.us-east1.run.app)
+
 > Evidence labels are deliberate: **LIVE** means running code; **SYNTHETIC** means generated fictional cases/evaluation data; **SANDBOX** means a validated adapter contract or fixture, not a production connection. The prototype is decision support and never sanctions, rejects, restructures, disburses, or contacts a customer on its own.
 
 ## Start here
 
-- **Start with the experience:** watch the [three-minute demo video](https://www.loom.com/share/b22f095e05fd43a1b061f9d87f1eac70), open the [live demo](https://kisanflow-demo-1012823692058.us-east1.run.app), then use the [presenter walkthrough](DEMO_WALKTHROUGH.md) for the timed narrative and technical Q&A.
+- **See the complete story:** watch the [three-minute demo video](https://www.loom.com/share/b22f095e05fd43a1b061f9d87f1eac70), open the [live demo](https://kisanflow-demo-1012823692058.us-east1.run.app), and download the [ten-slide presentation](KisanFlow_Presentation.pptx).
+- **Reproduce the proof:** follow the [presenter walkthrough](DEMO_WALKTHROUGH.md), run the [automated tests](#run-locally), then inspect the machine-readable [model metrics](artifacts/model_metrics.json) and [agent-harness evaluations](docs/evals/AGENT_HARNESS_EVALS.md).
 - **Developer:** follow [Run locally](#run-locally), then inspect the [technical architecture](docs/TECHNICAL_ARCHITECTURE.md) and [OpenAPI contract](api/openapi.yaml).
 - **Field or product team:** use the [operator and user guide](docs/USER_GUIDE.md) for the case workflow, result interpretation and refusal paths.
 - **Model-risk or governance reviewer:** start with the [model card](MODEL_CARD.md), [data card](DATA_CARD.md), [threat model](THREAT_MODEL.md) and [responsible-AI controls](docs/governance/RESPONSIBLE_AI.md).
@@ -72,6 +79,7 @@ Current synthetic evaluation (regenerate; do not hand-edit):
 | Conservative EWS precision | 45.8% | Alerts that precede labelled synthetic stress |
 | Conservative EWS recall | 28.2% | Deliberate precision/workload trade-off |
 | False alerts / 100 | 0.83 | Conservative operating point |
+| Median warning lead | 2.0 weeks | Median time from alert to labelled synthetic stress |
 | Maximum cohort recall gap | 0.092 | Synthetic diagnostic only—not real-world fairness evidence |
 
 ## Safety behaviour you can reproduce against the live service
@@ -144,8 +152,8 @@ Never commit a model key. On Cloud Run, bind it from Secret Manager as described
 - `docs/evals/` + `docs/governance/` — release-blocking agent tests and responsible-AI/DPDP readiness.
 - `docs/TECHNICAL_ARCHITECTURE.md` — system architecture, planner/tool/verifier lifecycle and failure controls.
 - `docs/USER_GUIDE.md` — product, operator and developer usage with response interpretation.
-- `KisanFlow_NABARD_Application.docx` — evidence-backed application.
-- `KisanFlow_Presentation.pptx` — ten-slide product and pilot presentation.
+- [`KisanFlow_NABARD_Application.docx`](KisanFlow_NABARD_Application.docx) — evidence-backed application.
+- [`KisanFlow_Presentation.pptx`](KisanFlow_Presentation.pptx) — current ten-slide product and pilot presentation.
 - `DEMO_WALKTHROUGH.md` — timed live-demo narrative and technical Q&A.
 - `cloud-run/DEPLOYMENT.md` — free-tier-oriented deployment and verification.
 
