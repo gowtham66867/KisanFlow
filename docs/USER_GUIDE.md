@@ -2,6 +2,8 @@
 
 ## Three-minute product walkthrough
 
+Recorded walkthrough: [watch the three-minute KisanFlow demo on Loom](https://www.loom.com/share/b22f095e05fd43a1b061f9d87f1eac70).
+
 1. Open the [live KisanFlow demo](https://kisanflow-demo-1012823692058.us-east1.run.app).
 2. Keep **Sakhi Dairy SHG** selected for the primary story.
 3. Turn financial consent off and run once. Confirm the case is blocked before any tool executes.
