@@ -6,11 +6,13 @@ KisanFlow is a working NABARD Hackathon 2026 prototype for SHGs, FPOs and rural 
 
 **Live product demo:** [kisanflow-demo-1012823692058.us-east1.run.app](https://kisanflow-demo-1012823692058.us-east1.run.app)
 
+**Three-minute demo video:** [Watch the KisanFlow product walkthrough on Loom](https://www.loom.com/share/b22f095e05fd43a1b061f9d87f1eac70)
+
 > Evidence labels are deliberate: **LIVE** means running code; **SYNTHETIC** means generated fictional cases/evaluation data; **SANDBOX** means a validated adapter contract or fixture, not a production connection. The prototype is decision support and never sanctions, rejects, restructures, disburses, or contacts a customer on its own.
 
 ## Start here
 
-- **Start with the experience:** open the [live demo](https://kisanflow-demo-1012823692058.us-east1.run.app), then follow the [three-minute product walkthrough](DEMO_WALKTHROUGH.md).
+- **Start with the experience:** watch the [three-minute demo video](https://www.loom.com/share/b22f095e05fd43a1b061f9d87f1eac70), open the [live demo](https://kisanflow-demo-1012823692058.us-east1.run.app), then use the [presenter walkthrough](DEMO_WALKTHROUGH.md) for the timed narrative and technical Q&A.
 - **Developer:** follow [Run locally](#run-locally), then inspect the [technical architecture](docs/TECHNICAL_ARCHITECTURE.md) and [OpenAPI contract](api/openapi.yaml).
 - **Field or product team:** use the [operator and user guide](docs/USER_GUIDE.md) for the case workflow, result interpretation and refusal paths.
 - **Model-risk or governance reviewer:** start with the [model card](MODEL_CARD.md), [data card](DATA_CARD.md), [threat model](THREAT_MODEL.md) and [responsible-AI controls](docs/governance/RESPONSIBLE_AI.md).

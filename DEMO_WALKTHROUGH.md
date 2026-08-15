@@ -2,6 +2,8 @@
 
 Live demo: <https://kisanflow-demo-1012823692058.us-east1.run.app>
 
+Recorded demo: <https://www.loom.com/share/b22f095e05fd43a1b061f9d87f1eac70>
+
 ## Opening line
 
 “KisanFlow predicts the next 26 weeks of cash flow for an SHG, FPO or rural micro-enterprise, explains stress before a missed repayment, and helps a field officer choose a consented response—without letting AI take the final action.”
