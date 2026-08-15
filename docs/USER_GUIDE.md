@@ -1,6 +1,6 @@
 # KisanFlow User and Operator Guide
 
-## Fastest evaluator path
+## Three-minute product walkthrough
 
 1. Open the [live KisanFlow demo](https://kisanflow-demo-1012823692058.us-east1.run.app).
 2. Keep **Sakhi Dairy SHG** selected for the primary story.
@@ -10,7 +10,7 @@
 6. Inspect the 26-week P10/P50/P90 range, stress reasons, proposed what-if response, eight tool events, verifier status and replay fingerprint.
 7. Confirm the action card is locked at `awaiting_independent_checker` and that no customer or account action occurred.
 
-Use `JURY_WALKTHROUGH.md` for the timed three-minute presentation and likely questions.
+Use `DEMO_WALKTHROUGH.md` for the timed presentation narrative and technical questions.
 
 ## What the forecast means
 
@@ -111,7 +111,7 @@ Do not hand-edit evaluation numbers. Commit the regenerated artifact, model/data
 
 ## Cloud Run operations
 
-Deployment and smoke-test commands are documented in `cloud-run/DEPLOYMENT.md`. Keep minimum instances at zero and maximum instances at one for the jury demo. Budgets are alerts, not hard spending caps.
+Deployment and smoke-test commands are documented in `cloud-run/DEPLOYMENT.md`. Keep minimum instances at zero and maximum instances at one for the public demo. Budgets are alerts, not hard spending caps.
 
 To halt new agent runs:
 

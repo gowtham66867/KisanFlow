@@ -12,7 +12,7 @@ test("demo and both Cloud Run copies are byte-identical", () => {
   assert.deepEqual(fs.readFileSync(path.join(ROOT, "cloud-run", "static", "index.html")), demo);
 });
 
-test("jury UI contains the challenge and safety contracts", () => {
+test("public UI contains the challenge and safety contracts", () => {
   const html = fs.readFileSync(path.join(ROOT, "demo", "kisanflow_demo.html"), "utf8");
   for (const claim of ["26-week", "P10", "P50", "P90", "Synthetic case", "Sandbox schemas", "Maker–checker", "No autonomous execution", "model_artifact.js"]) {
     assert.ok(html.includes(claim), `missing UI contract: ${claim}`);

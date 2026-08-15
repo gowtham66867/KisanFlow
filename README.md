@@ -4,13 +4,13 @@
 
 KisanFlow is a working NABARD Hackathon 2026 prototype for SHGs, FPOs and rural micro-enterprises. It combines weekly financial activity, optional digital-payment proxies, market intelligence and climate seasonality into P10/P50/P90 cash-flow forecasts, an early-warning card and a maker-checker intervention workflow.
 
-**Live jury demo:** [kisanflow-demo-1012823692058.us-east1.run.app](https://kisanflow-demo-1012823692058.us-east1.run.app)
+**Live product demo:** [kisanflow-demo-1012823692058.us-east1.run.app](https://kisanflow-demo-1012823692058.us-east1.run.app)
 
 > Evidence labels are deliberate: **LIVE** means running code; **SYNTHETIC** means generated fictional cases/evaluation data; **SANDBOX** means a validated adapter contract or fixture, not a production connection. The prototype is decision support and never sanctions, rejects, restructures, disburses, or contacts a customer on its own.
 
 ## Start here
 
-- **Evaluator:** open the [live demo](https://kisanflow-demo-1012823692058.us-east1.run.app), then follow the [three-minute jury walkthrough](JURY_WALKTHROUGH.md).
+- **Start with the experience:** open the [live demo](https://kisanflow-demo-1012823692058.us-east1.run.app), then follow the [three-minute product walkthrough](DEMO_WALKTHROUGH.md).
 - **Developer:** follow [Run locally](#run-locally), then inspect the [technical architecture](docs/TECHNICAL_ARCHITECTURE.md) and [OpenAPI contract](api/openapi.yaml).
 - **Field or product team:** use the [operator and user guide](docs/USER_GUIDE.md) for the case workflow, result interpretation and refusal paths.
 - **Model-risk or governance reviewer:** start with the [model card](MODEL_CARD.md), [data card](DATA_CARD.md), [threat model](THREAT_MODEL.md) and [responsible-AI controls](docs/governance/RESPONSIBLE_AI.md).
@@ -31,7 +31,7 @@ The immediate users are NABARD partner institutions, field officers, SHG/FPO sup
 
 The [official NABARD Hackathon 2026 brief](https://www.globalfintechfest.com/gff-hackathons/nabard-hackathon) asks for an AI/ML system that forecasts rural-enterprise cash flow over three to six months, integrates multiple financial/transaction/market/climate sources, flags stress early and provides actionable insights. KisanFlow implements that exact arc with a 26-week horizon and three challenge-aligned enterprise fixtures.
 
-The primary jury story is a women-led dairy SHG. Secondary fixtures demonstrate transfer to a millet micro-enterprise and an FPO without diluting the main narrative.
+The anchor scenario is a women-led dairy SHG. Two additional fixtures demonstrate transfer to a millet micro-enterprise and an FPO while keeping the human outcome clear.
 
 ## What actually runs
 
@@ -74,7 +74,7 @@ Current synthetic evaluation (regenerate; do not hand-edit):
 
 ## Safety behaviour you can reproduce against the live service
 
-Each refusal below is enforced server-side and covered by a test, so a jury can try to break the demo from a terminal:
+Each refusal below is enforced server-side and covered by a test. The controls can be reproduced directly against the live service:
 
 | Attempt | Response |
 |---|---|
@@ -113,7 +113,7 @@ curl -sS -X POST http://localhost:8080/api/agent/run \
     "scenario":"dairy_shg",
     "intervention":"timing",
     "consent":{"financial":true,"market":true,"climate":true,"revoked":false},
-    "actor":{"id":"jury-maker","role":"maker"}
+    "actor":{"id":"demo-maker","role":"maker"}
   }'
 ```
 
@@ -134,17 +134,17 @@ Never commit a model key. On Cloud Run, bind it from Secret Manager as described
 
 ## Repository map
 
-- `demo/kisanflow_demo.html` — responsive, zero-dependency jury experience.
+- `demo/kisanflow_demo.html` — responsive, zero-dependency product experience.
 - `ml/train_model.py` + `artifacts/model_metrics.json` — reproducible forecast/EWS benchmark and canonical metrics.
 - `cloud-run/server.js` — static server plus bounded `/api/agent/run` harness.
 - `api/openapi.yaml` + `api/schema/` — interoperable API and consent/action contracts.
 - `MODEL_CARD.md`, `DATA_CARD.md`, `THREAT_MODEL.md` — model/data limits and security boundaries.
 - `docs/evals/` + `docs/governance/` — release-blocking agent tests and responsible-AI/DPDP readiness.
 - `docs/TECHNICAL_ARCHITECTURE.md` — system architecture, planner/tool/verifier lifecycle and failure controls.
-- `docs/USER_GUIDE.md` — evaluator, operator and developer usage with response interpretation.
+- `docs/USER_GUIDE.md` — product, operator and developer usage with response interpretation.
 - `KisanFlow_NABARD_Application.docx` — evidence-backed application.
-- `KisanFlow_Presentation.pptx` — ten-slide jury pitch.
-- `JURY_WALKTHROUGH.md` — timed live-demo script and Q&A.
+- `KisanFlow_Presentation.pptx` — ten-slide product and pilot presentation.
+- `DEMO_WALKTHROUGH.md` — timed live-demo narrative and technical Q&A.
 - `cloud-run/DEPLOYMENT.md` — free-tier-oriented deployment and verification.
 
 ## Data rails and governance

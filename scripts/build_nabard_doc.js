@@ -98,7 +98,7 @@ children.push(
   ], [1500, 3180, 1500, 3180], false),
   para("", { after: 160 }),
   callout("THE THESIS", "KisanFlow predicts the next 26 weeks of enterprise cash flow, explains emerging stress before a missed repayment, and helps an authorised officer choose a consented corrective response. It never sanctions, rejects, restructures, disburses, or contacts a customer on its own."),
-  h2("Why this submission can win"),
+  h2("Why KisanFlow is differentiated"),
   bullet("Exact challenge fit: 26-week P10/P50/P90 forecasting, multiple data rails, early warning and actionable field-officer insight."),
   bullet("Proof over theatre: reproducible ML training, rolling-origin evaluation, explicit baseline and a machine-readable artifact."),
   bullet("Advanced agentic engineering with a narrow boundary: real LLM tool planning when configured; deterministic numbers, verifier, budgets, replay and maker-checker in every mode."),
@@ -260,7 +260,7 @@ children.push(
 // Page 8 — status and close
 children.push(
   h1("7. Delivery status, risks and final ask"),
-  h2("Proven in the submission package"),
+  h2("Demonstrated in the working prototype"),
   bullet("Responsive live demo with three rural-enterprise fixtures, granular consent, 26-week quantile chart, drivers, intervention simulation, human gate, agent trace and evaluation panel."),
   bullet("Reproducible synthetic-data forecast/EWS pipeline and canonical JSON artifact; Python and Node contract tests pass."),
   bullet("Bounded API with optional real LLM planner, deterministic fallback, verifier, idempotency and replay."),

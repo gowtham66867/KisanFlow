@@ -1,5 +1,5 @@
 {
-  "name": "kisanflow-nabard-submission",
+  "name": "kisanflow-nabard-prototype",
   "version": "1.0.0",
   "private": true,
   "description": "Reproducible KisanFlow NABARD challenge application, demo, agent harness, and evidence artifacts.",
