@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kisanflow.example/schema/action-card.v1.json",
+  "title": "KisanFlow proposed action card",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["action_card_id", "status", "reasons", "proposed_intervention", "customer_contacted", "account_changed", "required_next_role"],
+  "properties": {
+    "action_card_id": { "type": "string", "pattern": "^AC-[A-F0-9]{10}$" },
+    "status": { "const": "awaiting_independent_checker" },
+    "title": { "type": "string" },
+    "reasons": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "proposed_intervention": { "type": "string" },
+    "customer_contacted": { "const": false },
+    "account_changed": { "const": false },
+    "required_next_role": { "const": "checker" }
+  }
+}

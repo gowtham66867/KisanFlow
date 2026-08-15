@@ -1,2 +1,13 @@
 node_modules/
 .DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.coverage
+coverage/
+docx-render*/
+pptx-render*/
+*_inspect/
+~$*.pptx
+~$*.docx

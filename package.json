@@ -1,0 +1,19 @@
+{
+  "name": "kisanflow-nabard-submission",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reproducible KisanFlow NABARD challenge application, demo, agent harness, and evidence artifacts.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build:application": "node scripts/build_nabard_doc.js",
+    "serve": "node cloud-run/server.js",
+    "test:node": "node --test tests/*.test.js",
+    "test:python": "python3 -m unittest discover -s tests -v",
+    "test": "npm run test:node && npm run test:python"
+  },
+  "dependencies": {
+    "docx": "9.5.1"
+  }
+}

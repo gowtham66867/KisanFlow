@@ -1,0 +1,5 @@
+DEPLOYMENT.md
+deploy-free-tier.sh
+.DS_Store
+nginx.conf
+index.html
