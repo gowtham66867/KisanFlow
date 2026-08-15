@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kisanflow.example/schema/consent-receipt.v1.json",
+  "title": "KisanFlow consent receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["receipt_id", "purpose", "categories", "language", "granted_at", "expires_at", "revoked"],
+  "properties": {
+    "receipt_id": { "type": "string", "minLength": 8 },
+    "purpose": { "const": "cash_flow_early_warning_and_intervention_review" },
+    "categories": {
+      "type": "array",
+      "items": { "enum": ["financial", "market", "climate"] },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "language": { "enum": ["en", "hi", "gu", "or", "mr"] },
+    "granted_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string", "format": "date-time" },
+    "revoked": { "type": "boolean" }
+  }
+}

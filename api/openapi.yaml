@@ -1,0 +1,64 @@
+openapi: 3.1.0
+info:
+  title: KisanFlow Case Manager API
+  version: 1.0.0
+  description: Synthetic-data prototype API. It creates proposed action cards; it cannot execute a credit or customer action.
+paths:
+  /health:
+    get:
+      operationId: health
+      responses:
+        '200': { description: Healthy }
+  /api/agent/run:
+    post:
+      operationId: runCaseManager
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AgentRunRequest' }
+      responses:
+        '200':
+          description: Proposed action card awaiting an independent checker
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AgentRunResponse' }
+        '400': { description: Malformed JSON body }
+        '405': { description: Method not allowed }
+        '413': { description: Request body above the 32 KiB bound }
+        '422': { description: Contract rejected — unknown fixture, prohibited field, wrong role, or withdrawn/expired consent }
+        '503': { description: Operator kill switch engaged; no new run is accepted }
+components:
+  schemas:
+    AgentRunRequest:
+      type: object
+      additionalProperties: false
+      required: [scenario, consent, actor]
+      properties:
+        scenario: { type: string, enum: [dairy_shg, millet_enterprise, fpo] }
+        intervention: { type: string, enum: [timing, buyer, advisory] }
+        consent:
+          type: object
+          required: [financial, market, climate, revoked]
+          properties:
+            financial: { type: boolean, description: Required purpose. false or revoked=true refuses the run with 422. }
+            market: { type: boolean }
+            climate: { type: boolean }
+            revoked: { type: boolean, description: Withdrawal flag. true blocks the run before any tool executes. }
+            expires_at: { type: string, format: date-time, description: Optional receipt expiry. A past or unparseable value refuses the run. }
+        actor:
+          type: object
+          required: [id, role]
+          properties:
+            id: { type: string, minLength: 3 }
+            role: { type: string, const: maker }
+    AgentRunResponse:
+      type: object
+      required: [run_id, execution_mode, results, verifier, approval_gate, trace]
+      properties:
+        run_id: { type: string, format: uuid }
+        execution_mode: { type: string, enum: [llm_case_manager, offline_policy_runner] }
+        results: { type: object }
+        verifier: { type: object }
+        approval_gate: { type: object }
+        trace: { type: array, items: { type: object } }
