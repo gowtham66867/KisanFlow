@@ -25,7 +25,7 @@ Use `DEMO_WALKTHROUGH.md` for the timed presentation narrative and technical que
 
 ## Run locally
 
-Requirements: Node.js 20+ and Python 3.10+.
+Requirements: Node.js 22+ and Python 3.10+.
 
 ```bash
 git clone https://github.com/gowtham66867/KisanFlow.git
